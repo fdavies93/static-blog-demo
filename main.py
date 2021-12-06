@@ -44,4 +44,16 @@ def render_todo():
 def render_post(post_num : int):
     host = get_host(request)
     post = example_posts.get(post_num)
+    if post == None:
+        return render_template("show_post.html", hostname=host, post=asdict( Post(0, "404 Not Found", "Post not found.") ))
     return render_template("show_post.html", hostname=host, post=asdict(post))
+
+@app.route("/getinfo", methods=["POST"])
+def get_post_info():
+    my_json = request.json
+    post_num = my_json.get("post_num")
+    print(post_num)
+    info = {}
+    if post_num != None:
+        info = asdict(example_posts[post_num])
+    return info
